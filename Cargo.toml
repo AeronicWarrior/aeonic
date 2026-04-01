@@ -1,0 +1,87 @@
+[workspace]
+members = [
+    "crates/aeonic-core",
+    "crates/aeonic-policy",
+    "crates/aeonic-telemetry",
+    "crates/aeonic-providers",
+    "crates/aeonic-agents",
+    "crates/aeonic-state",
+    "crates/aeonic-router",
+    "crates/aeonic-gateway",
+    "crates/aeonic-cli",
+]
+resolver = "2"
+
+[workspace.package]
+version      = "0.1.0"
+edition      = "2021"
+authors      = ["AeronicWarrior"]
+license      = "MIT"
+repository   = "https://github.com/AeronicWarrior/aeonic"
+homepage     = "https://aeonic.space"
+description  = "The most advanced AI/AGI/LLM router and orchestrator"
+keywords     = ["llm", "ai", "router", "orchestrator", "agi"]
+categories   = ["api-bindings", "asynchronous", "network-programming"]
+
+[workspace.dependencies]
+# Async runtime
+tokio        = { version = "1.40", features = ["full"] }
+tokio-stream = { version = "0.1" }
+
+# HTTP
+axum         = { version = "0.7", features = ["ws", "multipart"] }
+reqwest      = { version = "0.12", features = ["json", "stream", "rustls-tls"], default-features = false }
+tower        = { version = "0.5" }
+tower-http   = { version = "0.6", features = ["cors", "trace", "compression-gzip"] }
+hyper        = { version = "1.0" }
+
+# Serialization
+serde        = { version = "1", features = ["derive"] }
+serde_json   = { version = "1" }
+toml         = { version = "0.8" }
+
+# Errors
+thiserror    = { version = "2" }
+anyhow       = { version = "1" }
+
+# Observability
+tracing                    = { version = "0.1" }
+tracing-subscriber         = { version = "0.3", features = ["env-filter", "json"] }
+opentelemetry              = { version = "0.26" }
+opentelemetry_sdk          = { version = "0.26", features = ["rt-tokio"] }
+opentelemetry-otlp         = { version = "0.26", features = ["tonic"] }
+tracing-opentelemetry      = { version = "0.27" }
+
+# Async utilities
+futures      = { version = "0.3" }
+async-trait  = { version = "0.1" }
+pin-project  = { version = "1" }
+
+# Data / types
+uuid         = { version = "1", features = ["v4", "serde"] }
+chrono       = { version = "0.4", features = ["serde"] }
+bytes        = { version = "1" }
+url          = { version = "2", features = ["serde"] }
+dashmap      = { version = "6" }
+
+# Config
+config       = { version = "0.14" }
+dotenvy      = { version = "0.15" }
+
+# CLI
+clap         = { version = "4", features = ["derive", "env"] }
+
+# Testing
+tokio-test   = { version = "0.4" }
+mockall      = { version = "0.13" }
+wiremock     = { version = "0.6" }
+
+[profile.release]
+opt-level     = 3
+lto           = "thin"
+codegen-units = 1
+strip         = true
+
+[profile.dev]
+opt-level = 0
+debug     = true

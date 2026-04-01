@@ -1,0 +1,27 @@
+[package]
+name        = "aeonic-providers"
+description = "LLM provider adapters for Aeonic"
+version.workspace    = true
+edition.workspace    = true
+authors.workspace    = true
+license.workspace    = true
+repository.workspace = true
+
+[dependencies]
+aeonic-core = { path = "../aeonic-core" }
+tokio       = { workspace = true }
+reqwest     = { workspace = true }
+serde       = { workspace = true }
+serde_json  = { workspace = true }
+thiserror   = { workspace = true }
+async-trait = { workspace = true }
+futures     = { workspace = true }
+bytes       = { workspace = true }
+tracing     = { workspace = true }
+uuid        = { workspace = true }
+chrono      = { workspace = true }
+pin-project = { workspace = true }
+
+[dev-dependencies]
+tokio-test  = { workspace = true }
+wiremock    = { workspace = true }

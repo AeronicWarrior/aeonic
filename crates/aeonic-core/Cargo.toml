@@ -1,0 +1,28 @@
+[package]
+name        = "aeonic-core"
+description = "Core traits, types, and async runtime for Aeonic"
+version.workspace     = true
+edition.workspace     = true
+authors.workspace     = true
+license.workspace     = true
+repository.workspace  = true
+
+[dependencies]
+tokio       = { workspace = true }
+serde       = { workspace = true }
+serde_json  = { workspace = true }
+thiserror   = { workspace = true }
+anyhow      = { workspace = true }
+async-trait = { workspace = true }
+futures     = { workspace = true }
+uuid        = { workspace = true }
+chrono      = { workspace = true }
+bytes       = { workspace = true }
+url         = { workspace = true }
+tracing     = { workspace = true }
+dashmap     = { workspace = true }
+pin-project = { workspace = true }
+
+[dev-dependencies]
+tokio-test  = { workspace = true }
+mockall     = { workspace = true }
