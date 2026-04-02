@@ -217,12 +217,12 @@ impl Provider for OpenAiProvider {
             provider: "openai".into(),
             usage,
             latency_ms,
-            finish_reason: match choice.finish_reason.as_deref() {
-                Some("stop")          => FinishReason::Stop,
-                Some("length")        => FinishReason::Length,
-                Some("tool_calls")    => FinishReason::ToolCalls,
-                Some("content_filter")=> FinishReason::ContentFilter,
-                _                     => FinishReason::Stop,
+            finish_reason: match choice.finish_reason.as_str() {
+                "stop"           => FinishReason::Stop,
+                "length"         => FinishReason::Length,
+                "tool_calls"     => FinishReason::ToolCalls,
+                "content_filter" => FinishReason::ContentFilter,
+                _                => FinishReason::Stop,
             },
             metadata: Default::default(),
         })

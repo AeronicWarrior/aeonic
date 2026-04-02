@@ -21,6 +21,7 @@ tracing     = { workspace = true }
 uuid        = { workspace = true }
 chrono      = { workspace = true }
 pin-project = { workspace = true }
+async-stream = { workspace = true }
 
 [dev-dependencies]
 tokio-test  = { workspace = true }

@@ -116,7 +116,7 @@ fn quality_score(model: &ModelInfo) -> f64 {
     };
 
     // Bonus for feature support
-    let mut bonus = 0.0;
+    let mut bonus: f64 = 0.0;
     if model.supports_tools      { bonus += 3.0; }
     if model.supports_vision     { bonus += 3.0; }
     if model.supports_json_mode  { bonus += 2.0; }

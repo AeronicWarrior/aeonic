@@ -132,12 +132,12 @@ async fn handle_stream(
                     }],
                     "aeonic": { "provider": chunk.provider }
                 });
-                Ok(axum::response::sse::Event::default()
+                Ok::<axum::response::sse::Event, axum::Error>(axum::response::sse::Event::default()
                     .data(data.to_string()))
             }
             Err(e) => {
                 let err_data = json!({ "error": e.to_string() });
-                Ok(axum::response::sse::Event::default()
+                Ok::<axum::response::sse::Event, axum::Error>(axum::response::sse::Event::default()
                     .data(err_data.to_string()))
             }
         }

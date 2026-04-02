@@ -54,6 +54,7 @@ tracing-opentelemetry      = { version = "0.27" }
 futures      = { version = "0.3" }
 async-trait  = { version = "0.1" }
 pin-project  = { version = "1" }
+async-stream = { version = "0.3" }
 
 # Data / types
 uuid         = { version = "1", features = ["v4", "serde"] }
