@@ -4,11 +4,9 @@ members = [
     "crates/aeonic-policy",
     "crates/aeonic-telemetry",
     "crates/aeonic-providers",
-    "crates/aeonic-agents",
     "crates/aeonic-state",
     "crates/aeonic-router",
     "crates/aeonic-gateway",
-    "crates/aeonic-cli",
 ]
 resolver = "2"
 
