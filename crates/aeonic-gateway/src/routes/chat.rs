@@ -77,7 +77,10 @@ async fn handle_complete(
     state: Arc<AppState>,
     request: Request,
 ) -> Result<Response, GatewayError> {
+    let request_clone = request.clone();
     let response = state.router.route(request).await.map_err(GatewayError)?;
+    state.telemetry.record(&request_clone, &response);
+
 
     let oai_response = json!({
         "id": format!("chatcmpl-{}", response.id),
