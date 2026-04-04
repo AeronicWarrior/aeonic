@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Aeonic Dashboard</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Space+Mono&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{--void:#02020a;--deep:#050510;--nebula:#0c0c22;--star:#e8e4ff;--starfaint:rgba(232,228,255,0.5);--cyan:#4af4e8;--violet:#a855f7;--rose:#f472b6;--amber:#fbbf24;--green:#22c55e;--red:#ef4444;--border:rgba(255,255,255,0.07)}
+body{font-family:'Inter',sans-serif;background:var(--void);color:var(--star);min-height:100vh}
+#starfield{position:fixed;top:0;left:0;width:100%;height:100%;z-index:0;pointer-events:none}
+.wrap{max-width:1200px;margin:0 auto;padding:0 2rem;position:relative;z-index:2}
+nav{position:sticky;top:0;z-index:100;padding:1rem 2rem;display:flex;align-items:center;justify-content:space-between;background:rgba(2,2,10,0.85);backdrop-filter:blur(14px);border-bottom:1px solid var(--border)}
+.logo{font-family:'Syne',sans-serif;font-weight:800;font-size:1.1rem;letter-spacing:0.1em;background:linear-gradient(90deg,var(--cyan),var(--violet));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;text-decoration:none}
+.nav-links{display:flex;gap:1.5rem;align-items:center}
+.nav-links a{color:var(--starfaint);text-decoration:none;font-size:0.8rem;font-family:'Space Mono',monospace;transition:color 0.2s}
+.nav-links a:hover{color:var(--cyan)}
+.dot{width:8px;height:8px;border-radius:50%;background:var(--green);display:inline-block;margin-right:6px;animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.4}}
+main{padding:2rem 0 4rem}
+.page-title{font-family:'Syne',sans-serif;font-size:1.8rem;font-weight:800;margin-bottom:0.25rem}
+.page-sub{color:var(--starfaint);font-size:0.875rem;font-family:'Space Mono',monospace;margin-bottom:2.5rem}
+.metrics-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1rem;margin-bottom:2rem}
+.card{background:var(--deep);border:1px solid var(--border);padding:1.25rem 1.5rem;border-radius:4px;position:relative;overflow:hidden;transition:border-color 0.2s}
+.card:hover{border-color:rgba(74,244,232,0.2)}
+.card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px}
+.card.cyan::before{background:var(--cyan)}.card.violet::before{background:var(--violet)}.card.amber::before{background:var(--amber)}.card.green::before{background:var(--green)}.card.rose::before{background:var(--rose)}
+.label{font-family:'Space Mono',monospace;font-size:0.65rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--starfaint);margin-bottom:0.5rem}
+.value{font-family:'Syne',sans-serif;font-size:2rem;font-weight:800;line-height:1}
+.sub{font-size:0.75rem;color:var(--starfaint);margin-top:0.4rem}
+.card.cyan .value{color:var(--cyan)}.card.violet .value{color:var(--violet)}.card.amber .value{color:var(--amber)}.card.green .value{color:var(--green)}.card.rose .value{color:var(--rose)}
+.section-title{font-family:'Syne',sans-serif;font-size:1rem;font-weight:700;margin-bottom:1rem}
+.community-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1rem;margin-bottom:2rem}
+.comm-card{background:var(--deep);border:1px solid var(--border);border-radius:4px;padding:1.5rem;display:flex;align-items:center;gap:1rem;text-decoration:none;transition:border-color 0.2s}
+.comm-card:hover{border-color:rgba(74,244,232,0.25)}
+.comm-icon{width:40px;height:40px;border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.comm-icon.discord{background:rgba(88,101,242,0.15);border:1px solid rgba(88,101,242,0.3)}
+.comm-icon.github{background:rgba(232,228,255,0.06);border:1px solid var(--border)}
+.comm-icon.crates{background:rgba(251,191,36,0.08);border:1px solid rgba(251,191,36,0.2)}
+.comm-name{font-family:'Syne',sans-serif;font-size:0.95rem;font-weight:700;color:var(--star)}
+.comm-count{font-family:'Space Mono',monospace;font-size:0.7rem;color:var(--starfaint);margin-top:0.2rem}
+.panels{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;margin-bottom:2rem}
+@media(max-width:768px){.panels{grid-template-columns:1fr}}
+.panel{background:var(--deep);border:1px solid var(--border);border-radius:4px;padding:1.5rem}
+.panel-title{font-family:'Space Mono',monospace;font-size:0.72rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--starfaint);margin-bottom:1.25rem;padding-bottom:0.75rem;border-bottom:1px solid var(--border)}
+.provider-row{display:flex;align-items:center;justify-content:space-between;padding:0.6rem 0;border-bottom:1px solid var(--border)}
+.provider-row:last-child{border-bottom:none}
+.pname{font-family:'Space Mono',monospace;font-size:0.8rem}
+.badge{display:inline-block;font-family:'Space Mono',monospace;font-size:0.6rem;padding:0.2rem 0.5rem;border-radius:2px;letter-spacing:0.08em}
+.badge-green{background:rgba(34,197,94,0.1);color:var(--green);border:1px solid rgba(34,197,94,0.2)}
+.empty{color:rgba(255,255,255,0.2);font-family:'Space Mono',monospace;font-size:0.75rem;text-align:center;padding:2rem 0}
+.refresh-btn{font-family:'Space Mono',monospace;font-size:0.7rem;padding:0.4rem 0.9rem;border:1px solid var(--border);background:transparent;color:var(--starfaint);cursor:pointer;border-radius:2px;transition:all 0.2s;letter-spacing:0.06em}
+.refresh-btn:hover{border-color:var(--cyan);color:var(--cyan)}
+.ts{font-family:'Space Mono',monospace;font-size:0.65rem;color:rgba(255,255,255,0.2);margin-left:1rem}
+table{width:100%;border-collapse:collapse;font-size:0.78rem}
+th{text-align:left;padding:0.5rem 0;font-family:'Space Mono',monospace;font-size:0.65rem;color:var(--starfaint);letter-spacing:0.1em;font-weight:400;border-bottom:1px solid var(--border)}
+td{padding:0.6rem 0;border-bottom:1px solid var(--border)}
+</style>
+</head>
+<body>
+<canvas id="starfield"></canvas>
+
+<nav>
+  <a href="https://aeonic.space" class="logo">AEONIC</a>
+  <div class="nav-links">
+    <span><span class="dot"></span><span style="font-size:0.75rem;font-family:'Space Mono',monospace" id="nav-status">online</span></span>
+    <a href="https://github.com/AeronicWarrior/aeonic" target="_blank">GitHub</a>
+    <a href="https://discord.gg/ejmcM5Nn" target="_blank">Discord</a>
+    <a href="/v1/models">Models API</a>
+  </div>
+</nav>
+
+<main>
+<div class="wrap">
+  <div style="display:flex;align-items:baseline;justify-content:space-between;flex-wrap:wrap;gap:1rem;margin-bottom:2rem">
+    <div>
+      <h1 class="page-title">Gateway Dashboard</h1>
+      <p class="page-sub">AEONIC v0.1.0 &nbsp;&middot;&nbsp; REAL-TIME METRICS</p>
+    </div>
+    <div>
+      <button class="refresh-btn" onclick="refreshAll()">Refresh</button>
+      <span class="ts" id="ts">--</span>
+    </div>
+  </div>
+
+  <div class="metrics-grid">
+    <div class="card cyan"><div class="label">Requests Routed</div><div class="value" id="m-req">--</div><div class="sub">since gateway start</div></div>
+    <div class="card violet"><div class="label">Tokens Processed</div><div class="value" id="m-tok">--</div><div class="sub">total all providers</div></div>
+    <div class="card amber"><div class="label">Est. Cost</div><div class="value" id="m-cost">--</div><div class="sub">USD this session</div></div>
+    <div class="card green"><div class="label">Models Available</div><div class="value" id="m-models">--</div><div class="sub">across all providers</div></div>
+    <div class="card rose"><div class="label">Error Rate</div><div class="value" id="m-err">--</div><div class="sub">failed / total</div></div>
+  </div>
+
+  <div class="section-title" style="margin-bottom:1rem">Community Traction</div>
+  <div class="community-grid">
+    <a href="https://github.com/AeronicWarrior/aeonic" class="comm-card" target="_blank">
+      <div class="comm-icon github">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="var(--star)"><path d="M12 2C6.477 2 2 6.477 2 12c0 4.418 2.865 8.166 6.839 9.489.5.092.682-.217.682-.482 0-.237-.008-.866-.013-1.7-2.782.603-3.369-1.342-3.369-1.342-.454-1.155-1.11-1.462-1.11-1.462-.908-.62.069-.608.069-.608 1.003.07 1.531 1.03 1.531 1.03.892 1.529 2.341 1.087 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.11-4.555-4.943 0-1.091.39-1.984 1.029-2.683-.103-.253-.446-1.27.098-2.647 0 0 .84-.269 2.75 1.025A9.578 9.578 0 0112 6.836c.85.004 1.705.114 2.504.336 1.909-1.294 2.747-1.025 2.747-1.025.546 1.377.202 2.394.1 2.647.64.699 1.028 1.592 1.028 2.683 0 3.842-2.339 4.687-4.566 4.935.359.309.678.919.678 1.852 0 1.336-.012 2.415-.012 2.741 0 .267.18.578.688.48C19.138 20.163 22 16.418 22 12c0-5.523-4.477-10-10-10z"/></svg>
+      </div>
+      <div><div class="comm-name">GitHub Stars</div><div class="comm-count" id="gh-stars">Loading...</div></div>
+    </a>
+    <a href="https://discord.gg/ejmcM5Nn" class="comm-card" target="_blank">
+      <div class="comm-icon discord">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="#5865F2"><path d="M20.317 4.37a19.791 19.791 0 00-4.885-1.515.074.074 0 00-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 00-5.487 0 12.64 12.64 0 00-.617-1.25.077.077 0 00-.079-.037A19.736 19.736 0 003.677 4.37a.07.07 0 00-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 00.031.057 19.9 19.9 0 005.993 3.03.078.078 0 00.084-.028c.462-.63.874-1.295 1.226-1.994a.076.076 0 00-.041-.106 13.107 13.107 0 01-1.872-.892.077.077 0 01-.008-.128 10.2 10.2 0 00.372-.292.074.074 0 01.077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 01.078.01c.12.098.246.198.373.292a.077.077 0 01-.006.127 12.299 12.299 0 01-1.873.892.077.077 0 00-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 00.084.028 19.839 19.839 0 006.002-3.03.077.077 0 00.032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 00-.031-.03z"/></svg>
+      </div>
+      <div><div class="comm-name">Discord</div><div class="comm-count" id="discord-m">discord.gg/ejmcM5Nn</div></div>
+    </a>
+    <a href="https://crates.io/crates/aeonic-core" class="comm-card" target="_blank">
+      <div class="comm-icon crates">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--amber)" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+      </div>
+      <div><div class="comm-name">crates.io</div><div class="comm-count" id="crates-dl">Loading...</div></div>
+    </a>
+  </div>
+
+  <div class="panels">
+    <div class="panel">
+      <div class="panel-title">Provider Status</div>
+      <div id="providers-list"><div class="empty">Loading...</div></div>
+    </div>
+    <div class="panel">
+      <div class="panel-title">Model Catalog</div>
+      <div id="model-table"><div class="empty">Loading...</div></div>
+    </div>
+  </div>
+</div>
+</main>
+
+<script>
+const canvas = document.getElementById("starfield"), ctx = canvas.getContext("2d");
+let stars = [];
+function resize(){canvas.width=window.innerWidth;canvas.height=window.innerHeight}
+function initStars(){stars=[];const n=Math.floor(canvas.width*canvas.height/5000);for(let i=0;i<n;i++)stars.push({x:Math.random()*canvas.width,y:Math.random()*canvas.height,r:Math.random()*1.1+0.2,speed:Math.random()*0.0003+0.0001,phase:Math.random()*Math.PI*2})}
+function drawStars(t){ctx.clearRect(0,0,canvas.width,canvas.height);for(const s of stars){const a=0.25+0.4*Math.sin(s.phase+t*s.speed*1000);ctx.beginPath();ctx.arc(s.x,s.y,s.r,0,Math.PI*2);ctx.fillStyle="rgba(232,228,255,"+a+")";ctx.fill()}}
+let last=0;function animate(t){if(t-last>60){drawStars(t);last=t}requestAnimationFrame(animate)}
+resize();initStars();requestAnimationFrame(animate);
+window.addEventListener("resize",function(){resize();initStars()});
+
+function fmt(n){if(n>=1000000)return (n/1000000).toFixed(1)+"M";if(n>=1000)return (n/1000).toFixed(1)+"k";return String(n)}
+
+async function fetchHealth(){
+  try{
+    const r=await fetch("/health");
+    const d=await r.json();
+    document.getElementById("m-models").textContent=d.models_available||"--";
+    document.getElementById("nav-status").textContent="online";
+    if(d.telemetry){
+      document.getElementById("m-req").textContent=fmt(d.telemetry.total_requests||0);
+      document.getElementById("m-tok").textContent=fmt(d.telemetry.total_tokens||0);
+      document.getElementById("m-cost").textContent="$"+(d.telemetry.total_cost_usd||0).toFixed(4);
+      const e=d.telemetry.total_errors||0, t=d.telemetry.total_requests||1;
+      document.getElementById("m-err").textContent=t>0?((e/t)*100).toFixed(1)+"%":"0%";
+    }
+    if(d.providers&&d.providers.length){
+      document.getElementById("providers-list").innerHTML=d.providers.map(function(p){
+        return "<div class=\"provider-row\"><span class=\"pname\">"+p+"</span><span class=\"badge badge-green\">ONLINE</span></div>";
+      }).join("");
+    }
+  }catch(e){document.getElementById("nav-status").textContent="offline";}
+}
+
+async function fetchModels(){
+  try{
+    const r=await fetch("/v1/models");
+    const d=await r.json();
+    const models=d.data||[];
+    if(!models.length){document.getElementById("model-table").innerHTML="<div class=\"empty\">No models</div>";return;}
+    const capColor={"frontier":"var(--violet)","advanced":"var(--cyan)","standard":"var(--amber)","basic":"var(--starfaint)"};
+    document.getElementById("model-table").innerHTML="<table><thead><tr><th>Model</th><th>Provider</th><th>Cap</th><th style=\"text-align:right\">$/1M in</th></tr></thead><tbody>"+
+      models.map(function(m){
+        const a=m.aeonic||{};
+        const cap=a.capability||"";
+        const col=capColor[cap]||"var(--starfaint)";
+        const cost=a.cost_input_per_1m_usd||0;
+        const costStr=cost===0?"<span style=\"color:var(--green)\">FREE</span>":"$"+cost.toFixed(2);
+        return "<tr><td style=\"font-family:'Space Mono',monospace;font-size:0.72rem\">"+m.id+"</td><td style=\"color:var(--starfaint)\">"+( a.provider||m.owned_by)+"</td><td><span style=\"color:"+col+";font-family:'Space Mono',monospace;font-size:0.65rem;text-transform:uppercase\">"+cap+"</span></td><td style=\"text-align:right;font-family:'Space Mono',monospace\">"+costStr+"</td></tr>";
+      }).join("")+"</tbody></table>";
+  }catch(e){}
+}
+
+async function fetchGitHub(){
+  try{
+    const r=await fetch("https://api.github.com/repos/AeronicWarrior/aeonic");
+    const d=await r.json();
+    document.getElementById("gh-stars").textContent=(d.stargazers_count||0)+" stars / "+(d.forks_count||0)+" forks";
+  }catch(e){document.getElementById("gh-stars").textContent="github.com/AeronicWarrior/aeonic";}
+}
+
+async function fetchCrates(){
+  try{
+    const r=await fetch("https://crates.io/api/v1/crates/aeonic-core");
+    const d=await r.json();
+    document.getElementById("crates-dl").textContent=fmt(d.crate&&d.crate.downloads||0)+" downloads";
+  }catch(e){document.getElementById("crates-dl").textContent="crates.io/crates/aeonic-core";}
+}
+
+async function refreshAll(){
+  await Promise.all([fetchHealth(),fetchModels()]);
+  document.getElementById("ts").textContent="updated "+new Date().toLocaleTimeString();
+}
+
+refreshAll();
+fetchGitHub();
+fetchCrates();
+setInterval(refreshAll,10000);
+setInterval(function(){fetchGitHub();fetchCrates();},60000);
+</script>
+</body>
+</html>

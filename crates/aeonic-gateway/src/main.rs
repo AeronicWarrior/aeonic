@@ -17,10 +17,8 @@ use tracing_subscriber::{layer::SubscriberExt, util::SubscriberInitExt, EnvFilte
 
 #[tokio::main]
 async fn main() -> anyhow::Result<()> {
-    // Load .env file if present
     let _ = dotenvy::dotenv();
 
-    // Set up tracing
     tracing_subscriber::registry()
         .with(EnvFilter::try_from_default_env().unwrap_or_else(|_| "info,aeonic=debug".into()))
         .with(tracing_subscriber::fmt::layer().pretty())
@@ -28,10 +26,8 @@ async fn main() -> anyhow::Result<()> {
 
     info!("Starting Aeonic Gateway v{}", env!("CARGO_PKG_VERSION"));
 
-    // Build the router with available providers
     let mut router_builder = AeonicRouter::builder().max_fallback_attempts(3);
 
-    // Register providers based on available API keys
     if let Ok(key) = std::env::var("OPENAI_API_KEY") {
         info!("Registering OpenAI provider");
         router_builder = router_builder.provider(OpenAiProvider::new(key));
@@ -50,15 +46,13 @@ async fn main() -> anyhow::Result<()> {
     let aeonic_router = Arc::new(router_builder.build());
     let state = Arc::new(AppState::new(aeonic_router));
 
-    // Build Axum app
     let app = Router::new()
-        // Health & info
-        .route("/health",  get(routes::health::health))
+        .route("/",          get(routes::dashboard::dashboard))
+        .route("/dashboard", get(routes::dashboard::dashboard))
+        .route("/health",    get(routes::health::health))
         .route("/v1/models", get(routes::models::list_models))
-        // Chat completions (OpenAI-compatible)
         .route("/v1/chat/completions", post(routes::chat::chat_completions))
-        // Aeonic-native routes
-        .route("/aeonic/v1/route", post(routes::chat::aeonic_route))
+        .route("/aeonic/v1/route",     post(routes::chat::aeonic_route))
         .with_state(state)
         .layer(
             tower::ServiceBuilder::new()
@@ -79,10 +73,10 @@ async fn main() -> anyhow::Result<()> {
 
     let addr = SocketAddr::from((host.parse::<std::net::IpAddr>()?, port));
     info!("Aeonic Gateway listening on http://{addr}");
+    info!("Dashboard: http://{addr}/dashboard");
     info!("OpenAI-compatible endpoint: http://{addr}/v1/chat/completions");
 
     let listener = tokio::net::TcpListener::bind(addr).await?;
     axum::serve(listener, app).await?;
-
     Ok(())
 }

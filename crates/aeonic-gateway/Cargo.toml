@@ -15,6 +15,7 @@ path = "src/main.rs"
 aeonic-core      = { path = "../aeonic-core" }
 aeonic-router    = { path = "../aeonic-router" }
 aeonic-providers = { path = "../aeonic-providers" }
+aeonic-telemetry = { path = "../aeonic-telemetry" }
 tokio            = { workspace = true }
 axum             = { workspace = true }
 tower            = { workspace = true }
