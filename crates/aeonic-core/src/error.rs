@@ -76,7 +76,10 @@ impl AeonicError {
     pub fn is_retryable(&self) -> bool {
         matches!(
             self,
-            Self::RateLimit { .. } | Self::Timeout { .. } | Self::Http(_)
+            Self::RateLimit { .. }
+            | Self::Timeout { .. }
+            | Self::Http(_)
+            | Self::Auth { .. }
         )
     }
 
