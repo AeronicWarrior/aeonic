@@ -12,10 +12,10 @@ name = "aeonic-gateway"
 path = "src/main.rs"
 
 [dependencies]
-aeonic-core      = { path = "../aeonic-core" }
-aeonic-router    = { path = "../aeonic-router" }
-aeonic-providers = { path = "../aeonic-providers" }
-aeonic-telemetry = { path = "../aeonic-telemetry" }
+aeonic-core      = { path = "../aeonic-core", version = "0.1.0" }
+aeonic-router    = { path = "../aeonic-router", version = "0.1.0" }
+aeonic-providers = { path = "../aeonic-providers", version = "0.1.0" }
+aeonic-telemetry = { path = "../aeonic-telemetry", version = "0.1.0" }
 tokio            = { workspace = true }
 axum             = { workspace = true }
 tower            = { workspace = true }

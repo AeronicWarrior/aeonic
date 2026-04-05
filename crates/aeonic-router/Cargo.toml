@@ -8,8 +8,8 @@ license.workspace    = true
 repository.workspace = true
 
 [dependencies]
-aeonic-core      = { path = "../aeonic-core" }
-aeonic-providers = { path = "../aeonic-providers" }
+aeonic-core      = { path = "../aeonic-core", version = "0.1.0" }
+aeonic-providers = { path = "../aeonic-providers", version = "0.1.0" }
 tokio            = { workspace = true }
 serde            = { workspace = true }
 serde_json       = { workspace = true }
