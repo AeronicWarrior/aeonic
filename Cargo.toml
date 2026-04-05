@@ -6,6 +6,7 @@ members = [
     "crates/aeonic-providers",
     "crates/aeonic-state",
     "crates/aeonic-router",
+    "crates/aeonic-agents",
     "crates/aeonic-gateway",
 ]
 resolver = "2"
